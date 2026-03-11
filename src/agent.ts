@@ -141,6 +141,6 @@ export class ResearchAgent extends BaseAgent {
       tags: ["research", "auto-generated"],
     };
 
-    return client.request(createItem("artifacts", artifact));
+    return client.request(createItem("artifacts" as any, artifact as any)) as Promise<Artifact>;
   }
 }
