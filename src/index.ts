@@ -63,12 +63,27 @@ async function main() {
   process.on("SIGINT", shutdown);
   process.on("SIGTERM", shutdown);
 
-  // Start agent (registers with Directus)
-  await agent.start();
-
+  // Start HTTP server first so health checks can respond
   server.listen(PORT, () => {
     console.log(`Research agent listening on port ${PORT}`);
   });
+
+  // Register with Directus (retry on failure — Directus may not be ready yet)
+  const MAX_RETRIES = 5;
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      await agent.start();
+      break;
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      console.error(`Directus registration attempt ${attempt}/${MAX_RETRIES} failed: ${errMsg}`);
+      if (attempt === MAX_RETRIES) {
+        console.error("Could not register with Directus — running without registration");
+      } else {
+        await new Promise((r) => setTimeout(r, 5000 * attempt));
+      }
+    }
+  }
 }
 
 function readBody(req: http.IncomingMessage): Promise<string> {
