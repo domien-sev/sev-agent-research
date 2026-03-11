@@ -2,7 +2,7 @@ import { BaseAgent } from "@domien-sev/agent-sdk";
 import type { AgentConfig } from "@domien-sev/agent-sdk";
 import type { RoutedMessage, AgentResponse, Artifact } from "@domien-sev/shared-types";
 import { createItem } from "@directus/sdk";
-import { searchBrave } from "./tools/brave-search.js";
+import { searchWeb } from "./tools/web-search.js";
 import { buildResearchSummary } from "./handlers/summarize.js";
 
 export class ResearchAgent extends BaseAgent {
@@ -36,7 +36,7 @@ export class ResearchAgent extends BaseAgent {
 
       // Step 1: Web search
       this.logger.info("Searching the web...");
-      const searchResults = await searchBrave(query);
+      const searchResults = await searchWeb(query);
 
       if (searchResults.length === 0) {
         this.status = "online";

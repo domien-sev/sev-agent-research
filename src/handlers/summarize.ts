@@ -6,7 +6,7 @@
  * synthesis, the OpenClaw skill layer handles that via Claude.
  */
 
-import type { SearchResult } from "../tools/brave-search.js";
+import type { SearchResult } from "../tools/web-search.js";
 
 export function buildResearchSummary(
   query: string,
