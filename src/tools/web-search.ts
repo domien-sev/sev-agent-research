@@ -22,8 +22,9 @@ interface SearxResponse {
   results?: SearxResult[];
 }
 
-// Public SearXNG instances with JSON API enabled
+// SearXNG instances — self-hosted first, public fallbacks
 const SEARXNG_INSTANCES = [
+  process.env.SEARXNG_URL ?? "http://sev-searxng:8080",
   "https://search.ononoki.org",
   "https://searx.tiekoetter.com",
   "https://search.sapti.me",
